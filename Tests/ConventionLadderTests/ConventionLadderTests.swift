@@ -135,20 +135,22 @@ final class GateTests: XCTestCase {
         XCTAssertFalse(findings.contains { $0.excerpt.contains("user.name!") })
     }
 
-    func testNaiveGrepFlags13LinesWhereSixAreReal() {
+    func testNaiveGrepFlags13LinesAndEightAreWrong() {
         let writes = SampleTeam.allWrites
-        let sleep = NaiveGrep(needles: ["sleep("])
-        let print = NaiveGrep(needles: ["print("])
-        let bang = NaiveGrep(needles: ["!"])
-        var naive = 0
+        let real = Set(gate.findings(in: writes).map { "\($0.path):\($0.line)" })
+        var naive: [String] = []
         for w in writes {
-            if w.path.hasPrefix("Tests/") { naive += sleep.lineNumbers(in: w.text).count }
-            if w.path.hasPrefix("Sources/") { naive += print.lineNumbers(in: w.text).count }
-            if w.path.hasPrefix("Sources/Networking/") { naive += bang.lineNumbers(in: w.text).count }
+            var needles: [String] = []
+            if w.path.hasPrefix("Tests/") { needles.append("sleep(") }
+            if w.path.hasPrefix("Sources/") { needles.append("print(") }
+            if w.path.hasPrefix("Sources/Networking/") { needles.append("!") }
+            naive += NaiveGrep(needles: needles).lineNumbers(in: w.text).map { "\(w.path):\($0)" }
         }
-        XCTAssertEqual(naive, 13)
-        XCTAssertEqual(gate.findings(in: writes).count, 5)
-        // 5 lint findings + 1 hook block = 6 real violations; grep alone can't see the hook one.
+        XCTAssertEqual(naive.count, 13)
+        XCTAssertEqual(real.count, 5)
+        XCTAssertEqual(naive.filter { !real.contains($0) }.count, 8)
+        // Every real lint finding is also a grep hit: masking removes noise, it doesn't lose hits here.
+        XCTAssertTrue(real.isSubset(of: Set(naive)))
     }
 }
 
