@@ -149,7 +149,7 @@ struct FindingsView: View {
             Section {
                 Toggle("Compare with a plain grep", isOn: $showNaive)
                 if showNaive {
-                    Text("grep flags \(naiveLines.count) lines; \(falsePositives) of them are comments, strings or `!=`.")
+                    Text("grep flags \(naiveLines.count) lines; \(falsePositives) of them are comments, strings, `!=` or a `!` negation.")
                         .font(.footnote)
                 } else {
                     Text("\(findings.count) lint findings across the session, plus 1 edit blocked by the Package.resolved hook. CheckoutTests' asyncAfter wait is not caught: that judgment stays prose.")
