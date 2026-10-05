@@ -23,7 +23,7 @@ public enum Rung: Int, CaseIterable, Comparable, Sendable, Identifiable {
     /// When the rung costs context tokens.
     public var tokenCost: String {
         switch self {
-        case .typeSystem: return "never (the build fails instead)"
+        case .typeSystem: return "no standing cost; only the compiler error, when the build fails"
         case .lint, .hook: return "only when it fires"
         case .prose: return "every turn"
         }

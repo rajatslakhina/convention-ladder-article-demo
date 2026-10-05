@@ -43,8 +43,9 @@ public enum SessionCost {
     /// The prose-only policy pays for every CLAUDE.md line on every turn, and
     /// never catches anything: compliance is up to the model. The ladder policy
     /// pays for the judgment lines on every turn and for guidance only when a
-    /// check fires. Type-system conventions cost nothing in either column here:
-    /// the build fails before the agent's context is involved.
+    /// check fires. Type-system conventions are left out of both columns: they
+    /// have no standing cost, and the compiler error they produce when the build
+    /// fails isn't modelled here.
     public static func replay(_ turns: [AgentTurn],
                               conventions: [Convention],
                               hook: ProtectedPathHook) -> SessionReport {
