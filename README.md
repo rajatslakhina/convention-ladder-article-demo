@@ -8,7 +8,7 @@ Most iOS teams' `CLAUDE.md` / `AGENTS.md` is a list of conventions written as pr
 
 | Rung | Holds | Context cost |
 |---|---|---|
-| Type system / build graph | "Money is never a Double", "feature modules never import each other" | never (the build fails instead) |
+| Type system / build graph | "Money is never a Double", "feature modules never import each other" | no standing cost; only the compiler error, when the build fails |
 | Lint (per-file, deterministic) | "never sleep in tests", "no force-unwraps in Networking", "no print()" | only when it fires |
 | Agent hook (fires on an action) | "never edit Package.resolved by hand", "run the tests before you say done" | only when it fires |
 | Prose in CLAUDE.md | "prefer composition over subclassing", "explain the failure mode in checkout PRs" | every turn |
@@ -48,6 +48,7 @@ report.events.count      // 6      (5 lint findings + 1 blocked Package.resolved
 
 - On the sample session the lint rules fire 5 times and the hook blocks 1 edit. A plain substring grep for the same three rules flags **13 lines, 8 of them wrong** (comments, a string literal, `!=`, a `!` negation). Precision is the feature: a noisy check gets switched off.
 - One thing is deliberately **not** caught: `CheckoutTests` waits with `DispatchQueue.main.asyncAfter`. That's still waiting on time, but it isn't a call to `sleep`. "Wait on state, not time" is the judgment; the lint only catches its most common symptom. That line stays prose.
+- Type-system rules are left out of both token columns: no standing cost, and the compiler error they produce on a failed build isn't modelled.
 - Token counts are UTF-8 bytes / 4 estimates, the same estimator on both sides. With prompt caching, the prose column is cheaper in money than it looks. It still occupies the window on every turn.
 - `try!` and `as!` are not force *unwraps* and don't fire. Implicitly unwrapped optionals (`String!`) do.
 - This is a lexer, not a parser. A production rule set should sit on SwiftSyntax; the masker keeps the demo dependency-free and runnable on Linux CI.
