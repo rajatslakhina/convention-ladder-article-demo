@@ -48,7 +48,7 @@ report.events.count      // 6      (5 lint findings + 1 blocked Package.resolved
 
 - On the sample session the lint rules fire 5 times and the hook blocks 1 edit. A plain substring grep for the same three rules flags **13 lines, 8 of them wrong** (comments, a string literal, `!=`, a `!` negation). Precision is the feature: a noisy check gets switched off.
 - One thing is deliberately **not** caught: `CheckoutTests` waits with `DispatchQueue.main.asyncAfter`. That's still waiting on time, but it isn't a call to `sleep`. "Wait on state, not time" is the judgment; the lint only catches its most common symptom. That line stays prose.
-- Type-system rules are left out of both token columns: no standing cost, and the compiler error they produce on a failed build isn't modelled.
+- The two type-system rules count in the all-prose column (that's where they'd sit as prose) and cost nothing on the ladder; the compiler error a failed build would produce isn't modelled. Drop them from both columns and it's 3,840 vs 1,832.
 - Token counts are UTF-8 bytes / 4 estimates, the same estimator on both sides. With prompt caching, the prose column is cheaper in money than it looks. It still occupies the window on every turn.
 - `try!` and `as!` are not force *unwraps* and don't fire. Implicitly unwrapped optionals (`String!`) do.
 - This is a lexer, not a parser. A production rule set should sit on SwiftSyntax; the masker keeps the demo dependency-free and runnable on Linux CI.
