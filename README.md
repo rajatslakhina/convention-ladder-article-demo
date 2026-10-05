@@ -2,7 +2,7 @@
 
 **Stop asking your coding agent to remember your team's rules. Put each rule on the lowest rung that can hold it.**
 
-Article: (added after publish)
+Article: [I Sorted a Team's CLAUDE.md Onto a Ladder. Only 3 of 10 Rules Needed to Stay Prose.](https://medium.com/@er.rajatlakhina/i-sorted-a-teams-claude-md-onto-a-ladder-only-3-of-10-rules-needed-to-stay-prose-cd39aefaaeb3) (Medium)
 
 Most iOS teams' `CLAUDE.md` / `AGENTS.md` is a list of conventions written as prose. Prose is probabilistic: the model may or may not recall a line when it matters, and every line sits in the context window on every turn. This package is a small, runnable version of the alternative: sort each convention onto a ladder, and only keep the ones that need judgment as prose.
 
